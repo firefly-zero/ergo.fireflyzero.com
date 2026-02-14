@@ -31,6 +31,7 @@ services:
             key: /etc/letsencrypt/live/ergo.fireflyzero.com/privkey.pem
 
       ERGO__HISTORY__PERSISTENT__ENABLED: "true"
+      ERGO__HISTORY__AUTOREPLAY-ON-JOIN: "1000"
       ERGO__DATASTORE__MYSQL__ENABLED: "true"
       ERGO__DATASTORE__MYSQL__HOST: "mysql"
       ERGO__DATASTORE__MYSQL__USER: "ergo"
