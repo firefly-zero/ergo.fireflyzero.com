@@ -8,7 +8,7 @@ services:
       - "8097:8097"
     volumes:
       - ./ergo-data:/ircd
-      - /etc/letsencrypt/live/ergo.fireflyzero.com:/certs
+      - /etc/letsencrypt:/etc/letsencrypt
     env_file:
       - path: .env
     environment:
@@ -27,8 +27,8 @@ services:
         ":8097":
           websocket: true
           tls:
-              cert: /certs/fullchain.pem
-              key: /certs/privkey.pem
+              cert: /etc/letsencrypt/live/ergo.fireflyzero.com/fullchain.pem
+              key: /etc/letsencrypt/live/ergo.fireflyzero.com/privkey.pem
 
       ERGO__HISTORY__PERSISTENT__ENABLED: "true"
       ERGO__DATASTORE__MYSQL__ENABLED: "true"
