@@ -1,20 +1,13 @@
 # https://taskfile.dev
 version: "3"
 
+dotenv:
+  - .env
+
 tasks:
-  download:
-    status:
-      - test -f ergo/ergo
-    cmds:
-      - wget https://github.com/ergochat/ergo/releases/download/v2.17.0/ergo-2.17.0-linux-x86_64.tar.gz
-      - tar -xzf ./ergo*.tar.gz
-      - rm ./ergo*.tar.gz
-      - mv ergo-* ergo
   run:
     cmds:
-      - task: download
-      - ./ergo/ergo mkcerts
-      - ./ergo/ergo run
+      - sudo -E docker compose up
   default:
     cmds:
-      - task: download
+      - task: run

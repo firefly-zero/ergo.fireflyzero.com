@@ -1,0 +1,33 @@
+services:
+  ergo:
+    init: true
+    image: ghcr.io/ergochat/ergo:stable
+    restart: always
+    ports:
+      - "6667:6667/tcp"
+      - "6697:6697/tcp"
+    volumes:
+      - ./ergo-data:/ircd
+    env_file:
+      - path: .env
+    environment:
+      ERGO__NETWORK__NAME: "FireflyZero"
+      ERGO__SERVER__NAME: "ergo.fireflyzero.com"
+      ERGO__HISTORY__PERSISTENT__ENABLED: "true"
+      ERGO__DATASTORE__MYSQL__ENABLED: "true"
+      ERGO__DATASTORE__MYSQL__HOST: "mysql"
+      ERGO__DATASTORE__MYSQL__USER: "ergo"
+      ERGO__DATASTORE__MYSQL__PASSWORD: $DB_PASS
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    env_file:
+      - path: .env
+    environment:
+      MYSQL_ROOT_PASSWORD: $DB_ROOT_PASS
+      MYSQL_USER: ergo
+      MYSQL_PASSWORD: $DB_PASS
+      MYSQL_DATABASE: ergo_history
