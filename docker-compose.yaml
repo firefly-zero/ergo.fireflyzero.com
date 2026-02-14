@@ -17,18 +17,18 @@ services:
       ERGO__SERVER__LISTENERS: |
         # The standard SSL/TLS port for IRC is 6697. This will listen on all interfaces:
         ":6697":
-            # this is a standard TLS configuration with a single certificate;
-            # see the manual for instructions on how to configure SNI
-            tls:
-                cert: fullchain.pem
-                key: privkey.pem
-            proxy: false
-            min-tls-version: 1.2
+          # this is a standard TLS configuration with a single certificate;
+          # see the manual for instructions on how to configure SNI
+          tls:
+            cert: /etc/letsencrypt/live/ergo.fireflyzero.com/fullchain.pem
+            key: /etc/letsencrypt/live/ergo.fireflyzero.com/privkey.pem
+          proxy: false
+          min-tls-version: 1.2
         ":8097":
           websocket: true
           tls:
-              cert: /etc/letsencrypt/live/ergo.fireflyzero.com/fullchain.pem
-              key: /etc/letsencrypt/live/ergo.fireflyzero.com/privkey.pem
+            cert: /etc/letsencrypt/live/ergo.fireflyzero.com/fullchain.pem
+            key: /etc/letsencrypt/live/ergo.fireflyzero.com/privkey.pem
 
       ERGO__HISTORY__PERSISTENT__ENABLED: "true"
       ERGO__DATASTORE__MYSQL__ENABLED: "true"
