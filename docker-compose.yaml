@@ -2,17 +2,34 @@ services:
   ergo:
     init: true
     image: ghcr.io/ergochat/ergo:stable
-    restart: always
+    restart: unless-stopped
     ports:
-      - "6667:6667/tcp"
-      - "6697:6697/tcp"
+      - "6697:6697"
+      - "8097:8097"
     volumes:
       - ./ergo-data:/ircd
+      - /etc/letsencrypt/live/ergo.fireflyzero.com:/certs
     env_file:
       - path: .env
     environment:
       ERGO__NETWORK__NAME: "FireflyZero"
       ERGO__SERVER__NAME: "ergo.fireflyzero.com"
+      ERGO__SERVER__LISTENERS: |
+        # The standard SSL/TLS port for IRC is 6697. This will listen on all interfaces:
+        ":6697":
+            # this is a standard TLS configuration with a single certificate;
+            # see the manual for instructions on how to configure SNI
+            tls:
+                cert: fullchain.pem
+                key: privkey.pem
+            proxy: false
+            min-tls-version: 1.2
+        ":8097":
+          websocket: true
+          tls:
+              cert: /certs/fullchain.pem
+              key: /certs/privkey.pem
+
       ERGO__HISTORY__PERSISTENT__ENABLED: "true"
       ERGO__DATASTORE__MYSQL__ENABLED: "true"
       ERGO__DATASTORE__MYSQL__HOST: "mysql"
@@ -21,7 +38,7 @@ services:
 
   mysql:
     image: mysql:latest
-    restart: always
+    restart: unless-stopped
     volumes:
       - ./mysql-data:/var/lib/mysql
     env_file:
